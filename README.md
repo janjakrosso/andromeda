@@ -1,7 +1,7 @@
 # andromeda
 Server update
 ```console
-# Gerekli portlar
+# Required ports
 sudo apt install -y ufw
 sudo ufw default allow outgoing
 sudo ufw default deny incoming
@@ -10,12 +10,12 @@ sudo ufw allow 9100
 sudo ufw allow 26656
 sudo ufw allow 26657
 
-# Sunucu update 
+# Server update 
 sudo apt update && sudo apt upgrade -y
 sudo apt install git
 sudo apt install -y curl git jq lz4 build-essential unzip
 
-# Go'yu yüklüyoruz
+# Installing Go
 if [ "$(go version)" != "go version go1.20.2 linux/amd64" ]; then \
 ver="1.20.2" && \
 wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz" && \
@@ -28,9 +28,9 @@ fi
 
 go version
 
-# go version sonrası çıktı: go version go1.20.2 linux/amd64
+# Then the go version came out: go version go1.20.2 linux/amd64
 ```
-We're loading Andromeda
+Were loading Andromeda
 ```console
 NODE_MONIKER="Validator Name"
 
@@ -43,7 +43,7 @@ git checkout galileo-3-v1.1.0-beta1
 make install
 
 andromedad version 
-# version çıktı: galileo-3-v1.1.0-beta1
+# version is out: galileo-3-v1.1.0-beta1
 
 andromedad config keyring-backend test
 andromedad config chain-id galileo-3
@@ -68,7 +68,7 @@ sed -i 's|^prometheus *=.*|prometheus = true|' $HOME/.andromedad/config/config.t
 ```
 Service file
 ```console
-# Komple kopyalayarak girebilirsiniz
+# you can enter by copying it in one go
 
 sudo tee /etc/systemd/system/andromedad.service > /dev/null << EOF
 [Unit]
@@ -96,24 +96,24 @@ sudo systemctl enable andromedad
 sudo systemctl start andromedad
 
 sudo journalctl -u andromedad -f --no-hostname -o cat
-# Akan ekranda Height mevcut bloğunuzdur, explorer'dan latest block'a ulaşabilirsiniz.
+# you can access the latest block in explorer.
 ```
 Create wallet and token while syncing
 ```console
-# Cüzdan oluşturma
-andromedad keys add rues
-# rues kısmına wallet isminizi girin ve kaydedin bilgilerinizi.
+# Creating a wallet
+andromedad keys add 'name'
 
-# Recover yapmak isterseniz
-andromedad keys add rues --recover
-# Cüzdan bilgileriniz ile faucetten token alın, discorda mevcut.
 
-# Token geldiğini kontrol edelim
+# If you want to recover
+andromedad keys add 'name' --recover
+# Buy tokens from faucet with your wallet details, available on discorda.
+
+# Let's check that the token has arrived
 andromedad query bank balances cüzdan_adresiniz
-# Tokenleri hangi blokta talep ederseniz, node'unuz o bloğa gelene kadar tokenlerinizi göstermez
-# Güncel blokta değilseniz explorer'dan bakınız.
+# Whichever block you claim tokens in, your node won't show your tokens until you get to that block
+# If you are not in the current block, check in explorer.
 
-# Bu komuttan sonra false çıktısı alırsanız validatör oluşturma kısmına geçebilirsiniz.
+# If you get false output after this command, you can proceed to validator creation.
 andromedad status 2>&1 | jq .SyncInfo.catching_up
 ```
 Validator creation
